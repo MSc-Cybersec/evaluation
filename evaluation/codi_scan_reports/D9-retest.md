@@ -1,0 +1,33 @@
+### SAGF Compliance Report — `DVWA-master/vulnerabilities/cryptography/index.php`
+
+## SAGF Compliance Scan: `DVWA-master/vulnerabilities/cryptography/index.php`
+**Scanned at**: 2026-10-11T16:59:34.084942+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### ✅ No violations detected by static pattern analysis
+
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+| 🔴 Critical | [CRYPT-M-001](https://verify.example-org.internal/?id=CRYPT-M-001) | Encryption at Rest |
+| 🔴 Critical | [CRYPT-M-002](https://verify.example-org.internal/?id=CRYPT-M-002) | Encryption in Transit (TLS 1.3+) |
+| 🟠 High | [CRYPT-M-004](https://verify.example-org.internal/?id=CRYPT-M-004) | Algorithm Selection & Post-Quantum Readiness |
+| 🔴 Critical | [CFG-M-008](https://verify.example-org.internal/?id=CFG-M-008) | Cryptographic Agility (External Algorithm Management) |
+| 🔴 Critical | [DB-M-002](https://verify.example-org.internal/?id=DB-M-002) | Database Encryption (At-Rest & In-Transit) |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [DB-M-004](https://verify.example-org.internal/?id=DB-M-004) | Database Security Hardening and Configuration |
+
+_+ 85 more applicable mandards — [view all 93 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+### 🤖 AI Semantic Analysis
+_Checked all 81 applicable advisory mandards against this code:_
+
+| Risk | Mandard | Status | Finding | Line |
+|------|---------|--------|---------|------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | SUSPECTED | `$html` is inserted into the response without demonstrated contextual output encoding | 41 |

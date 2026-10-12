@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SAGFMandard",
+  "type": "object",
+  "properties": {
+    "mandard_id": { "type": "string", "pattern": "^[A-Z]{3,4}-[A-Z]-[0-9]{3}$" },
+    "title": { "type": "string" },
+    "domain": { "type": "string" },
+    "category": { "type": "integer", "minimum": 0, "maximum": 8 },
+    "statement": { "type": "string" },
+    "risk_explanation": { "type": "string" },
+    "actionable_guidance": { "type": "string" },
+    "automatable_verification": { "type": "string" },
+    "auditable_evidence": { "type": "string" },
+    "primary_detector": { "type": "string" },
+    "maturity_level": { "type": "string", "enum": ["L1", "L2", "L3"] },
+    "compliance_mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "framework": { "type": "string" },
+          "control_id": { "type": "string" },
+          "requirement_text": { "type": "string" }
+        },
+        "required": ["framework", "control_id"]
+      }
+    }
+  },
+  "required": ["mandard_id", "title", "domain", "category", "statement", "primary_detector", "maturity_level"]
+}

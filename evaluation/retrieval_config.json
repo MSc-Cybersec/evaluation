@@ -1,0 +1,57 @@
+{
+  "_comment": "Pinned retrieval configuration under which all Chapter 5 trials were executed. Environment-variable names match app/services/embedding_service.py and app/models/mandard_models.py at the baseline commit.",
+  "artefact_baseline": {
+    "component": "verify-backend",
+    "commit": "997c9b6",
+    "commit_date": "2026-09-28",
+    "verified": "2026-10-04"
+  },
+  "embedding": {
+    "EMBEDDING_PROVIDER": "azure_openai",
+    "EMBEDDING_MODEL": "text-embedding-3-large",
+    "EMBEDDING_DIMENSIONS": 1536,
+    "EMBEDDING_DISTANCE_METRIC": "cosine",
+    "authentication": "Azure Managed Identity (no API key)"
+  },
+  "generation": {
+    "AZURE_OPENAI_ENDPOINT": "host-organisation Azure OpenAI resource (own tenant)",
+    "CHAT_MODEL": "gpt-5.6-sol",
+    "library_default_if_unset": "gpt-4o-mini",
+    "max_output_tokens": 4096,
+    "CHAT_COMPLETION_TOKEN_PARAMETER": "max_tokens | max_completion_tokens",
+    "temperature": "0.3 when max_tokens is used; not accepted by reasoning-class deployments using max_completion_tokens",
+    "seed": null,
+    "authentication": "Azure Managed Identity (no API key)",
+    "reproducibility_note": "Generation is not reproducible token-for-token: no seed is fixed and the deployment may be updated by the provider. Model-independent results (corpus synthesis metrics, static finding counts, the detection and citation audit) replicate exactly; model-conditioned results (semantic findings, the 80 Sage consultations, response-contract counts, failure modes F4-F6) may differ. See s3.8 Model Dependence and Reproducibility."
+  },
+  "vector_store": {
+    "engine": "PostgreSQL 15+",
+    "extension": "pgvector",
+    "index_type": "HNSW",
+    "index_operator_class": "vector_cosine_ops",
+    "lexical_index": "TSVECTOR with GIN",
+    "corpora": [
+      "governance corpus (334 records)",
+      "organisational knowledge corpus"
+    ]
+  },
+  "degradation_guard": {
+    "library_default": "keyword_only",
+    "effect_if_unset": "No vector embeddings are generated and retrieval silently falls back to tsvector keyword search, exercising none of the RAG architecture.",
+    "why_published": "Publication of this file is what allows a replicator to confirm that vector retrieval was active rather than silently degraded. See s3.4 and s3.8 (Internal Validity).",
+    "verification": "GET /health reports checks.embedding_provider; the active provider is echoed in the EmbeddingStatus schema (app/schemas/mandard_schemas.py)."
+  },
+  "transport": {
+    "protocol": "Model Context Protocol (FastMCP)",
+    "host": "127.0.0.1",
+    "port": 8003,
+    "note": "Earlier crAPI and WebGoat runs failed on an unavailable MCP endpoint and were re-executed; see the provenance note in s5.1.1."
+  },
+  "detector_binding_note": {
+    "changed": "weak-hash detectors (MD5, SHA-1)",
+    "from": "CRYPT-M-001",
+    "to": "AUTH-M-001",
+    "rationale": "AUTH-M-001 (Secure Password Hashing) is the only corpus record whose statement prohibits MD5 and SHA-1 by name. CRYPT-M-001 governs Encryption at Rest.",
+    "effect": "31 findings in codi_scan_reports/ carry the superseded CRYPT-M-001 citation as captured at execution time; Chapter 5 reports them under the corrected binding."
+  }
+}

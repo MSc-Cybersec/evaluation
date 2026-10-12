@@ -1,0 +1,1879 @@
+# SAGF Workspace Scan Results
+
+**Files Found**: 186
+**Files Scanned**: 186
+**Files Skipped** (>500KB): 0
+**Files with Violations**: 31
+**Errors**: 0
+
+## 🚨 Files with Mandard Violations
+
+---
+
+## SAGF Compliance Scan: `src/client-side-control-challenge.php`
+**Scanned at**: 2026-10-11T16:36:40.600318+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 179 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 179
+$lSelect = isset($_REQUEST["select"])?$_REQUEST["select"]:"";
+// Line 198
+$lSelect = isset($_POST["select"])?$_POST["select"]:"";
+// Line 458
+<input type="checkbox" name="checkbox" id="id_checkbox" value="<?php echo $lRandomFlag;?>" required="required" disabled="disabled" /><span class="label">Select <?php echo $lRandomFlag;?>?</span><br/>
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [SAST-M-002](https://verify.example-org.internal/?id=SAST-M-002) | Secure File Upload Validation |
+| 🟠 High | [FILE-M-001](https://verify.example-org.internal/?id=FILE-M-001) | File Upload Type Validation & Scanning |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🟠 High | [AUTH-M-004](https://verify.example-org.internal/?id=AUTH-M-004) | Password Reset & Account Recovery |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 179, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/dns-lookup.php`
+**Scanned at**: 2026-10-11T16:36:40.258539+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 165 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 165
+echo '<pre class="output">'.shell_exec("nslookup " . $lTargetHost).'</pre>';
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🟠 High | [INJECT-M-001](https://verify.example-org.internal/?id=INJECT-M-001) | LDAP Injection Prevention |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🟠 High | [API-M-008](https://verify.example-org.internal/?id=API-M-008) | API Security Configuration Baseline |
+| 🟠 High | [API-M-013](https://verify.example-org.internal/?id=API-M-013) | Message-Level Integrity and Confidentiality |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 165, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/database-offline.php`
+**Scanned at**: 2026-10-11T16:36:38.676732+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 40 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 40
+$lDatabasePingResult = shell_exec("ping -c 1 $lDatabaseHost");
+// Line 46
+$lDatabaseTracerouteResult = shell_exec("traceroute --max-hops=2 --wait=2 $lDatabaseHost 2>&1");
+// Line 52
+$lTracerouteTCPResult = shell_exec("traceroute --max-hops=2 --wait=2 --tcp -p $lDatabasePort $lDatabaseHost 2>&1");
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🟠 High | [AUTH-M-004](https://verify.example-org.internal/?id=AUTH-M-004) | Password Reset & Account Recovery |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🔴 Critical | [AUTH-M-002](https://verify.example-org.internal/?id=AUTH-M-002) | Multi-Factor Authentication (MFA) Enforcement |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 40, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/pen-test-tool-lookup.php`
+**Scanned at**: 2026-10-11T16:36:43.551898+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 213 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 213
+gPenTestToolsJSON = eval("(" + gPenTestToolsJSONString + ")");
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [API-M-007](https://verify.example-org.internal/?id=API-M-007) | JWT Signature Validation |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 213, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/pen-test-tool-lookup-ajax.php`
+**Scanned at**: 2026-10-11T16:36:43.423403+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 110 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 110
+var lPenTestToolsJSON = eval("(" + lXMLHTTP.response + ")");
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [API-M-007](https://verify.example-org.internal/?id=API-M-007) | JWT Signature Validation |
+| 🟠 High | [API-M-008](https://verify.example-org.internal/?id=API-M-008) | API Security Configuration Baseline |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 110, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/ajax/jwt.php`
+**Scanned at**: 2026-10-11T16:36:42.161869+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing | 88 |
+
+#### [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) — Hardcoded password literal detected
+```php
+// Line 88
+if($lObfuscatePassword) { $row->password = "********"; }
+```
+**Suggested fix:**
+```php
+# Suggested fix: load passwords from environment, hash with bcrypt
+import os, bcrypt
+# Never store plain-text passwords
+password_hash = bcrypt.hashpw(os.environ['USER_PASSWORD'].encode(), bcrypt.gensalt())
+# Verify: bcrypt.checkpw(supplied_password.encode(), password_hash)
+```
+> 💡 **Why**: Risk: If a password database is breached, using weak or unsalted hashes (like MD5 or SHA1) allows attackers to use 'rainbow tables' to crack millions of passwords in seconds. Strong KDFs make this computationally infeasible.
+> 🔧 **Guidance**: A developer must refactor the authentication code to use a modern, approved library for password hashing (e.g., `spring-security-crypto`) and not use deprecated functions like `java.security.MessageDigest.getInstance("MD5")`.
+> [Full remediation →](https://verify.example-org.internal/?id=AUTH-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [AUTH-M-004](https://verify.example-org.internal/?id=AUTH-M-004) | Password Reset & Account Recovery |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🟠 High | [IDOR-M-002](https://verify.example-org.internal/?id=IDOR-M-002) | Opaque Object Identifiers |
+| 🟠 High | [IDOR-M-007](https://verify.example-org.internal/?id=IDOR-M-007) | Validate Nested Resource Ownership |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [API-M-007](https://verify.example-org.internal/?id=API-M-007) | JWT Signature Validation |
+| 🔴 Critical | [AUTH-M-002](https://verify.example-org.internal/?id=AUTH-M-002) | Multi-Factor Authentication (MFA) Enforcement |
+| 🔴 Critical | [OAUTH-M-001](https://verify.example-org.internal/?id=OAUTH-M-001) | OAuth 2.0 Token Security & Validation |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "AUTH-M-001", "severity": "CRITICAL", "line": 88, "message": "Hardcoded password literal detected", "fix_snippet": "# Suggested fix: load passwords from environment, hash with bcrypt\nimport os, bcrypt\n# Never store plain-text passwords\npassword_hash = bcrypt.hashpw(os.environ['USER_PASSWORD'].encode(), bcrypt.gensalt())\n# Verify: bcrypt.checkpw(supplied_password.encode(), password_hash)"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/edit-account-profile.php`
+**Scanned at**: 2026-10-11T16:36:44.020644+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 125 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 125
+$LogHandler->writeToLog("Failed to update profile for: " . $lUsername);
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🟠 High | [AUTH-M-004](https://verify.example-org.internal/?id=AUTH-M-004) | Password Reset & Account Recovery |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 125, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/echo.php`
+**Scanned at**: 2026-10-11T16:36:43.853499+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 148 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 148
+echo '<pre class="output">'.shell_exec("echo " . $lMessage).'</pre>';
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [HDR-M-011](https://verify.example-org.internal/?id=HDR-M-011) | Cross-Origin-Resource-Policy (CORP) |
+| 🔴 Critical | [HDR-M-012](https://verify.example-org.internal/?id=HDR-M-012) | Cross-Origin-Embedder-Policy (COEP) |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 148, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/content-security-policy.php`
+**Scanned at**: 2026-10-11T16:36:44.446766+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 119 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 119
+echo '<pre class="output">'.shell_exec("echo -n " . $lMessage).'</pre>';
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [HDR-M-011](https://verify.example-org.internal/?id=HDR-M-011) | Cross-Origin-Resource-Policy (CORP) |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [HDR-M-012](https://verify.example-org.internal/?id=HDR-M-012) | Cross-Origin-Embedder-Policy (COEP) |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 119, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/classes/YouTubeVideoHandler.php`
+**Scanned at**: 2026-10-11T16:36:43.713396+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 259 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 259
+$lYouTubeResponse = curl_exec($lCurlInstance);
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 259, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/classes/SQLQueryHandler.php`
+**Scanned at**: 2026-10-11T16:36:44.614718+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 114 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 114
+$lQueryString = "UPDATE security_level SET level = $safeLevel WHERE id = 1";
+// Line 203
+INSERT INTO user_poll_results(tool_name, username, date) VALUES ('".
+// Line 229
+INSERT INTO blogs_table(blogger_name, comment, date) VALUES ('".
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [SECR-M-002](https://verify.example-org.internal/?id=SECR-M-002) | Prevent Secret Exposure in CI/CD Logs and History |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [SECR-M-003](https://verify.example-org.internal/?id=SECR-M-003) | Enforce Temporary Credentials and Credential Rotation in CI/CD |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🔴 Critical | [SECR-M-004](https://verify.example-org.internal/?id=SECR-M-004) | Short-Lived Credentials & Rotation |
+| 🔴 Critical | [SECR-M-005](https://verify.example-org.internal/?id=SECR-M-005) | No Secrets in Build Logs |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 114, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/classes/RemoteFileHandler.php`
+**Scanned at**: 2026-10-11T16:36:42.580433+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 63 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 63
+$data = curl_exec($ch);
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🔴 Critical | [SAST-M-002](https://verify.example-org.internal/?id=SAST-M-002) | Secure File Upload Validation |
+| 🟠 High | [IDOR-M-002](https://verify.example-org.internal/?id=IDOR-M-002) | Opaque Object Identifiers |
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 63, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/classes/MySQLHandler.php`
+**Scanned at**: 2026-10-11T16:36:44.297669+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 254 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 254
+$UNKNOWN_DATABASE_MESSAGE = "Unable to select default database " . self::$mMySQLDatabaseName. ". It appears that the database to which Mutillidae is configured to connect has not been created. Try ...
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🟠 High | [AUTH-M-004](https://verify.example-org.internal/?id=AUTH-M-004) | Password Reset & Account Recovery |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [DB-M-004](https://verify.example-org.internal/?id=DB-M-004) | Database Security Hardening and Configuration |
+| 🟠 High | [DB-M-006](https://verify.example-org.internal/?id=DB-M-006) | Sensitive Data Masking and Fine-Grained Access |
+| 🟠 High | [INJECT-M-001](https://verify.example-org.internal/?id=INJECT-M-001) | LDAP Injection Prevention |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 254, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/classes/LogHandler.php`
+**Scanned at**: 2026-10-11T16:36:42.718856+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 106 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 106
+$lQuery = "INSERT INTO hitlog(hostname, ip, browser, referer, date) VALUES ('".
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [DB-M-004](https://verify.example-org.internal/?id=DB-M-004) | Database Security Hardening and Configuration |
+| 🟠 High | [INJECT-M-001](https://verify.example-org.internal/?id=INJECT-M-001) | LDAP Injection Prevention |
+| 🟠 High | [LOG-M-004](https://verify.example-org.internal/?id=LOG-M-004) | Trusted Time Synchronization for Security Events |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🔴 Critical | [INJECT-M-003](https://verify.example-org.internal/?id=INJECT-M-003) | XML External Entity (XXE) Prevention |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 106, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/password-generator.php`
+**Scanned at**: 2026-10-11T16:36:46.382377+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟡 MEDIUM | [CRYPT-M-002](https://verify.example-org.internal/?id=CRYPT-M-002) | Encryption in Transit (TLS 1.3+) | 52 |
+
+#### [CRYPT-M-002](https://verify.example-org.internal/?id=CRYPT-M-002) — Non-cryptographic random number generator detected
+```php
+// Line 52
+lPasswordText += lPasswordCharset.charAt(Math.floor(Math.random() * lPasswordCharset.length));
+```
+**Suggested fix:**
+```php
+// Suggested fix: use a cryptographically secure RNG
+// WRONG:  const token = Math.random().toString(36);
+const token = crypto.randomUUID();                          // browser / Node 19+
+// or:  const buf = crypto.getRandomValues(new Uint8Array(32));  // raw bytes
+# Python:  import secrets; token = secrets.token_urlsafe(32)
+```
+> 💡 **Why**: Risk: Unencrypted or weakly encrypted data in transit is vulnerable to interception, man-in-the-middle attacks, and eavesdropping on networks.
+> 🔧 **Guidance**: Configure TLS 1.3 as minimum. Disable TLS 1.0, 1.1, 1.2. Use modern cipher suites. Disable weak ciphers (RC4, DES, MD5).
+> [Full remediation →](https://verify.example-org.internal/?id=CRYPT-M-002)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🟠 High | [API-M-013](https://verify.example-org.internal/?id=API-M-013) | Message-Level Integrity and Confidentiality |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "CRYPT-M-002", "severity": "MEDIUM", "line": 52, "message": "Non-cryptographic random number generator detected", "fix_snippet": "// Suggested fix: use a cryptographically secure RNG\n// WRONG:  const token = Math.random().toString(36);\nconst token = crypto.randomUUID();                          // browser / Node 19+\n// or:  const buf = crypto.getRandomValues(new Uint8Array(32));  // raw bytes\n# Python:  import secrets; token = secrets.token_urlsafe(32)"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/text-file-viewer.php`
+**Scanned at**: 2026-10-11T16:36:47.898031+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 76 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 76
+<select size="1" name="textfile" id="id_textfile_select" autofocus="autofocus" <?php echo $lHTMLControlAttributes ?>>
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [IDOR-M-001](https://verify.example-org.internal/?id=IDOR-M-001) | IDOR Protection |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 76, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/test-connectivity.php`
+**Scanned at**: 2026-10-11T16:36:48.067911+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 95 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 95
+shell_exec("curl --silent -H 'Origin: http://$lCurrentOrigin' " . $lServerURL) .
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🔴 Critical | [HDR-M-011](https://verify.example-org.internal/?id=HDR-M-011) | Cross-Origin-Resource-Policy (CORP) |
+| 🔴 Critical | [HDR-M-012](https://verify.example-org.internal/?id=HDR-M-012) | Cross-Origin-Embedder-Policy (COEP) |
+| 🟠 High | [API-M-008](https://verify.example-org.internal/?id=API-M-008) | API Security Configuration Baseline |
+| 🟠 High | [INJECT-M-001](https://verify.example-org.internal/?id=INJECT-M-001) | LDAP Injection Prevention |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 95, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/view-someones-blog.php`
+**Scanned at**: 2026-10-11T16:36:51.698876+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 97 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 97
+<select name="author" id="id_author_select" autofocus="autofocus" <?php echo $lHTMLControlAttributes ?>>
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [IDOR-M-007](https://verify.example-org.internal/?id=IDOR-M-007) | Validate Nested Resource Ownership |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 97, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/view-user-privilege-level.php`
+**Scanned at**: 2026-10-11T16:36:52.147573+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing | 78 |
+
+#### [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) — Deprecated hash function MD5 detected
+```php
+// Line 78
+$lCryptoKey = MD5("SecretSauce12345");
+```
+**Suggested fix:**
+```php
+# Suggested fix: use a salted key derivation function for passwords
+import bcrypt
+password_hash = bcrypt.hashpw(plain_password.encode(), bcrypt.gensalt())
+# Non-credential digests (checksums, cache keys): use hashlib.sha256()
+```
+> 💡 **Why**: Risk: If a password database is breached, using weak or unsalted hashes (like MD5 or SHA1) allows attackers to use 'rainbow tables' to crack millions of passwords in seconds. Strong KDFs make this computationally infeasible.
+> 🔧 **Guidance**: A developer must refactor the authentication code to use a modern, approved library for password hashing (e.g., `spring-security-crypto`) and not use deprecated functions like `java.security.MessageDigest.getInstance("MD5")`.
+> [Full remediation →](https://verify.example-org.internal/?id=AUTH-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🔴 Critical | [CRYPT-M-001](https://verify.example-org.internal/?id=CRYPT-M-001) | Encryption at Rest |
+| 🔴 Critical | [CRYPT-M-002](https://verify.example-org.internal/?id=CRYPT-M-002) | Encryption in Transit (TLS 1.3+) |
+| 🟠 High | [CRYPT-M-004](https://verify.example-org.internal/?id=CRYPT-M-004) | Algorithm Selection & Post-Quantum Readiness |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "AUTH-M-001", "severity": "CRITICAL", "line": 78, "message": "Deprecated hash function MD5 detected", "fix_snippet": "# Suggested fix: use a salted key derivation function for passwords\nimport bcrypt\npassword_hash = bcrypt.hashpw(plain_password.encode(), bcrypt.gensalt())\n# Non-credential digests (checksums, cache keys): use hashlib.sha256()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/set-up-database.php`
+**Scanned at**: 2026-10-11T16:36:56.073707+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 1329 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 1329
+echo format("Trying to build XML version of accounts table to update accounts XML ".$lAccountXMLFilePath,"I");
+// Line 1332
+echo format("Trying to build text version of accounts table to update password text file ".$lPasswordFilePath,"I");
+// Line 1347
+echo format("Executed query 'SELECT * FROM accounts'. Found ".$lRecordsFound." records.","S");
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [HDR-M-011](https://verify.example-org.internal/?id=HDR-M-011) | Cross-Origin-Resource-Policy (CORP) |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [HDR-M-005](https://verify.example-org.internal/?id=HDR-M-005) | Disable Legacy X-XSS-Protection Filter |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 1329, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/source-viewer.php`
+**Scanned at**: 2026-10-11T16:37:02.751119+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 82 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 82
+<select name="phpfile" id="id_file_select" autofocus="autofocus" <?php echo $lHTMLControlAttributes ?>>
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🔴 Critical | [COOK-M-001](https://verify.example-org.internal/?id=COOK-M-001) | Secure Cookie Attributes (HttpOnly, Secure, SameSite) |
+| 🟠 High | [AUTH-M-003](https://verify.example-org.internal/?id=AUTH-M-003) | Session Management & Timeout Controls |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [OAUTH-M-001](https://verify.example-org.internal/?id=OAUTH-M-001) | OAuth 2.0 Token Security & Validation |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 82, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/webservices/soap/ws-echo.php`
+**Scanned at**: 2026-10-11T16:37:05.095421+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 131 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 131
+$lOutput = shell_exec($lCommand);
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+| 🟠 High | [CORS-M-001](https://verify.example-org.internal/?id=CORS-M-001) | No Reflected Origin (CORS) |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 131, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/webservices/soap/ws-dns-lookup.php`
+**Scanned at**: 2026-10-11T16:37:06.515528+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 147 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 147
+$lOutput = shell_exec($lCommand);
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+| 🟠 High | [CORS-M-001](https://verify.example-org.internal/?id=CORS-M-001) | No Reflected Origin (CORS) |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 147, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/javascript/ddsmoothmenu/jquery.min.js`
+**Scanned at**: 2026-10-11T16:37:14.783639+00:00
+**Mandard DB coverage**: 64 applicable mandards checked (SECR, SAST, HDR, CORS, INPUT, INJECT…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (2)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 12 |
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL query built by string interpolation or concatenation | 12 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```js
+// Line 12
+(function(){var l=this,g,y=l.jQuery,p=l.$,o=l.jQuery=l.$=function(E,F){return new o.fn.init(E,F)},D=/^[^<]*(<(.|\s)+>)[^>]*$|^#([\w-]+)$/,f=/^.[^:#\[\.,]*$/;o.fn=o.prototype={init:function(E,H){E=E...
+// Line 19
+(function(){var R=/((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,L=0,H=Object.prototype.toString;var F=function(Y,U,ab,ac){ab=...
+```
+**Suggested fix:**
+```js
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```js
+// Line 12
+(function(){var l=this,g,y=l.jQuery,p=l.$,o=l.jQuery=l.$=function(E,F){return new o.fn.init(E,F)},D=/^[^<]*(<(.|\s)+>)[^>]*$|^#([\w-]+)$/,f=/^.[^:#\[\.,]*$/;o.fn=o.prototype={init:function(E,H){E=E...
+```
+**Suggested fix:**
+```js
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🔴 Critical | [HDR-M-005](https://verify.example-org.internal/?id=HDR-M-005) | Disable Legacy X-XSS-Protection Filter |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+
+_+ 55 more applicable mandards — [view all 63 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 12, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}, {"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 12, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "AJAX-M-002", "title": "AJAX Response Sanitization & XSS Prevention", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "AJAX-M-001", "title": "AJAX Request Validation & CSRF Protection", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "DEP-M-002", "title": "Package Manager Lifecycle Script Hardening", "risk_level": "High"}, {"id": "DEP-M-003", "title": "Dependency Name-Confusion Defense (Typosquatting, Slopsquatting, Dependency Confusion)", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "DEP-M-001", "title": "Pin Dependency Versions in Production Builds", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/webservices/soap/lib/nusoap.php`
+**Scanned at**: 2026-10-11T16:37:15.588736+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (3)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing | 2694 |
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 3179 |
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL Injection Prevention (Parameterized Queries) | 8467 |
+
+#### [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) — Deprecated hash function MD5 detected
+```php
+// Line 2694
+// H(A1) = MD5(A1)
+// Line 2695
+$HA1 = md5($A1);
+// Line 2701
+$HA2 = md5($A2);
+```
+**Suggested fix:**
+```php
+# Suggested fix: use a salted key derivation function for passwords
+import bcrypt
+password_hash = bcrypt.hashpw(plain_password.encode(), bcrypt.gensalt())
+# Non-credential digests (checksums, cache keys): use hashlib.sha256()
+```
+> 💡 **Why**: Risk: If a password database is breached, using weak or unsalted hashes (like MD5 or SHA1) allows attackers to use 'rainbow tables' to crack millions of passwords in seconds. Strong KDFs make this computationally infeasible.
+> 🔧 **Guidance**: A developer must refactor the authentication code to use a modern, approved library for password hashing (e.g., `spring-security-crypto`) and not use deprecated functions like `java.security.MessageDigest.getInstance("MD5")`.
+> [Full remediation →](https://verify.example-org.internal/?id=AUTH-M-001)
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 3179
+$this->incoming_payload = curl_exec($this->ch);
+// Line 4162
+$this->debug('in invoke_method, calling function using eval()');
+// Line 4166
+$this->debug('in invoke_method, calling class method using eval()');
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```php
+// Line 8467
+$this->debug('Update cookie ' . $newName . '=' . $newCookie['value']);
+```
+**Suggested fix:**
+```php
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+> 💡 **Why**: Risk: SQL injection allows database compromise. Parameterized queries separate code from data.
+> 🔧 **Guidance**: Use prepared statements exclusively. Never concatenate user input into queries.
+> [Full remediation →](https://verify.example-org.internal/?id=DB-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [HDR-M-011](https://verify.example-org.internal/?id=HDR-M-011) | Cross-Origin-Resource-Policy (CORP) |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+| 🟠 High | [IDOR-M-007](https://verify.example-org.internal/?id=IDOR-M-007) | Validate Nested Resource Ownership |
+
+_+ 82 more applicable mandards — [view all 90 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "AUTH-M-001", "severity": "CRITICAL", "line": 2694, "message": "Deprecated hash function MD5 detected", "fix_snippet": "# Suggested fix: use a salted key derivation function for passwords\nimport bcrypt\npassword_hash = bcrypt.hashpw(plain_password.encode(), bcrypt.gensalt())\n# Non-credential digests (checksums, cache keys): use hashlib.sha256()"}, {"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 3179, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}, {"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 8467, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/javascript/jQuery/jquery.js`
+**Scanned at**: 2026-10-11T16:37:15.104831+00:00
+**Mandard DB coverage**: 64 applicable mandards checked (SECR, SAST, HDR, CORS, INPUT, INJECT…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (3)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 119 |
+| 🟡 MEDIUM | [CRYPT-M-002](https://verify.example-org.internal/?id=CRYPT-M-002) | Encryption in Transit (TLS 1.3+) | 1522 |
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL query built by string interpolation or concatenation | 3937 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```js
+// Line 119
+match = rquickExpr.exec( selector );
+// Line 495
+if ( (parsed = rsingleTag.exec( data )) ) {
+// Line 2688
+tns = rtypenamespace.exec( types[t] ) || [];
+```
+**Suggested fix:**
+```js
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+#### [CRYPT-M-002](https://verify.example-org.internal/?id=CRYPT-M-002) — Non-cryptographic random number generator detected
+```js
+// Line 1522
+expando: "jQuery" + ( jQuery.fn.jquery + Math.random() ).replace( /\D/g, "" ),
+// Line 3685
+expando = ( "sizcache" + Math.random() ).replace( ".", "" ),
+```
+**Suggested fix:**
+```js
+// Suggested fix: use a cryptographically secure RNG
+// WRONG:  const token = Math.random().toString(36);
+const token = crypto.randomUUID();                          // browser / Node 19+
+// or:  const buf = crypto.getRandomValues(new Uint8Array(32));  // raw bytes
+# Python:  import secrets; token = secrets.token_urlsafe(32)
+```
+> 💡 **Why**: Risk: Unencrypted or weakly encrypted data in transit is vulnerable to interception, man-in-the-middle attacks, and eavesdropping on networks.
+> 🔧 **Guidance**: Configure TLS 1.3 as minimum. Disable TLS 1.0, 1.1, 1.2. Use modern cipher suites. Disable weak ciphers (RC4, DES, MD5).
+> [Full remediation →](https://verify.example-org.internal/?id=CRYPT-M-002)
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```js
+// Line 3937
+return select( selector.replace( rtrim, "$1" ), context, results, seed, xml );
+```
+**Suggested fix:**
+```js
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+| 🟠 High | [LOG-M-004](https://verify.example-org.internal/?id=LOG-M-004) | Trusted Time Synchronization for Security Events |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [HDR-M-011](https://verify.example-org.internal/?id=HDR-M-011) | Cross-Origin-Resource-Policy (CORP) |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+
+_+ 54 more applicable mandards — [view all 62 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 119, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}, {"mandard_id": "CRYPT-M-002", "severity": "MEDIUM", "line": 1522, "message": "Non-cryptographic random number generator detected", "fix_snippet": "// Suggested fix: use a cryptographically secure RNG\n// WRONG:  const token = Math.random().toString(36);\nconst token = crypto.randomUUID();                          // browser / Node 19+\n// or:  const buf = crypto.getRandomValues(new Uint8Array(32));  // raw bytes\n# Python:  import secrets; token = secrets.token_urlsafe(32)"}, {"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 3937, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "DEP-M-001", "title": "Pin Dependency Versions in Production Builds", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DEP-M-002", "title": "Package Manager Lifecycle Script Hardening", "risk_level": "High"}, {"id": "DEP-M-003", "title": "Dependency Name-Confusion Defense (Typosquatting, Slopsquatting, Dependency Confusion)", "risk_level": "High"}, {"id": "AJAX-M-002", "title": "AJAX Response Sanitization & XSS Prevention", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "AJAX-M-001", "title": "AJAX Request Validation & CSRF Protection", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/webservices/rest/ws-test-connectivity.php`
+**Scanned at**: 2026-10-11T16:37:13.524380+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [CORS-M-001](https://verify.example-org.internal/?id=CORS-M-001) | No Reflected Origin (CORS) | 9 |
+
+#### [CORS-M-001](https://verify.example-org.internal/?id=CORS-M-001) — Wildcard CORS origin (*) allows any domain
+```php
+// Line 9
+#   - Access-Control-Allow-Origin: * or specific domains
+```
+**Suggested fix:**
+```php
+// Suggested fix: restrict CORS to an explicit allowlist
+const cors = require('cors');
+const allowed = ['https://app.example.com', 'https://admin.example.com'];
+app.use(cors({
+    origin: (origin, cb) => allowed.includes(origin) ? cb(null, true) : cb(new Error('Not allowed')),
+    credentials: true
+}));
+```
+> 💡 **Why**: Risk: A reflective CORS policy allows *any* malicious site to make authenticated requests from a logged-in user's browser, bypassing the Same-Origin Policy and stealing their data. This was a critical finding.
+> 🔧 **Guidance**: A developer must configure the API backend to use a strict whitelist of allowed domains for CORS, and *never* reflect the `Origin` header from the request.
+> [Full remediation →](https://verify.example-org.internal/?id=CORS-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+| 🟠 High | [API-M-013](https://verify.example-org.internal/?id=API-M-013) | Message-Level Integrity and Confidentiality |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🔴 Critical | [AUTH-M-001](https://verify.example-org.internal/?id=AUTH-M-001) | Secure Password Hashing |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "CORS-M-001", "severity": "HIGH", "line": 9, "message": "Wildcard CORS origin (*) allows any domain", "fix_snippet": "// Suggested fix: restrict CORS to an explicit allowlist\nconst cors = require('cors');\nconst allowed = ['https://app.example.com', 'https://admin.example.com'];\napp.use(cors({\n    origin: (origin, cb) => allowed.includes(origin) ? cb(null, true) : cb(new Error('Not allowed')),\n    credentials: true\n}));"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/webservices/rest/ws-echo.php`
+**Scanned at**: 2026-10-11T16:37:13.847564+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 95 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 95
+$lOutput = shell_exec($lCommand);
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 95, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/webservices/rest/ws-dns-lookup.php`
+**Scanned at**: 2026-10-11T16:37:13.662546+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) | No Critical SAST Findings | 100 |
+
+#### [SAST-M-001](https://verify.example-org.internal/?id=SAST-M-001) — Dangerous code execution function detected
+```php
+// Line 100
+$lOutput = shell_exec($lCommand);
+```
+**Suggested fix:**
+```php
+# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)
+import subprocess
+# WRONG:  subprocess.call('ls ' + user_input, shell=True)
+result = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe
+# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()
+```
+> 💡 **Why**: Risk: This is the primary defense against code-level flaws. It directly blocks the introduction of vulnerabilities like those found in penetration tests (e.g., Insecure File Upload, IDOR logic). It shifts discovery from a late-stage pen test to the d
+> 🔧 **Guidance**: A developer must remediate the flagged vulnerability (e.g., use a parameterized query instead of string concatenation) to meet the quality gate standards.
+> [Full remediation →](https://verify.example-org.internal/?id=SAST-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | Input Encoding & Output Encoding |
+| 🔴 Critical | [API-M-003](https://verify.example-org.internal/?id=API-M-003) | Broken Function Level Authorization (BFLA) |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🔴 Critical | [API-M-001](https://verify.example-org.internal/?id=API-M-001) | Broken Object Level Authorization (BOLA/IDOR) Prevention |
+| 🔴 Critical | [HDR-M-014](https://verify.example-org.internal/?id=HDR-M-014) | Content Security Policy CSP |
+
+_+ 84 more applicable mandards — [view all 92 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "SAST-M-001", "severity": "HIGH", "line": 100, "message": "Dangerous code execution function detected", "fix_snippet": "# Suggested fix: avoid eval/exec; use subprocess with a list (no shell=True)\nimport subprocess\n# WRONG:  subprocess.call('ls ' + user_input, shell=True)\nresult = subprocess.run(['ls', user_input], capture_output=True, text=True)  # safe\n# For dynamic config: use ast.literal_eval() or json.loads() instead of eval()"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "API-M-003", "title": "Broken Function Level Authorization (BFLA)", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "API-M-001", "title": "Broken Object Level Authorization (BOLA/IDOR) Prevention", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "API-M-013", "title": "Message-Level Integrity and Confidentiality", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "API-M-002", "title": "Excessive Data Exposure Prevention", "risk_level": "Critical"}, {"id": "API-M-005", "title": "Auth on Sensitive API", "risk_level": "Critical"}, {"id": "API-M-011", "title": "GraphQL Query Complexity Limits", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "API-M-008", "title": "API Security Configuration Baseline", "risk_level": "High"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "OAUTH-M-001", "title": "OAuth 2.0 Token Security & Validation", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "DB-M-003", "title": "Database Access Control & Least Privilege", "risk_level": "High"}, {"id": "DB-M-006", "title": "Sensitive Data Masking and Fine-Grained Access", "risk_level": "High"}, {"id": "FILE-M-001", "title": "File Upload Type Validation & Scanning", "risk_level": "High"}, {"id": "FILE-M-002", "title": "File Storage & Execution Prevention", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "API-M-004", "title": "Mass Assignment Protection", "risk_level": "Critical"}, {"id": "API-M-006", "title": "Rate Limiting Enforced", "risk_level": "Critical"}, {"id": "API-M-007", "title": "JWT Signature Validation", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "API-M-009", "title": "API Inventory & Versioning Management", "risk_level": "High"}, {"id": "API-M-010", "title": "API-Specific Audit Logging & Monitoring", "risk_level": "High"}, {"id": "API-M-012", "title": "Disable Introspection in Production", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "CFG-M-003", "title": "Secure Cookie Flags", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DB-M-001", "title": "SQL Injection Prevention (Parameterized Queries)", "risk_level": "Critical"}, {"id": "DB-M-002", "title": "Database Encryption (At-Rest & In-Transit)", "risk_level": "Critical"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "CFG-M-009", "title": "Policy and Tool Configuration as Code", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DB-M-004", "title": "Database Security Hardening and Configuration", "risk_level": "High"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "CFG-M-002", "title": "Disable Autocomplete on Sensitive Fields", "risk_level": "Critical"}, {"id": "CFG-M-008", "title": "Cryptographic Agility (External Algorithm Management)", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "ERR-M-003", "title": ".NET Custom Errors Enabled", "risk_level": "Critical"}, {"id": "SAML-M-001", "title": "SAML Assertion Validation & Signature", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DB-M-005", "title": "Database Activity Monitoring and Audit Logging", "risk_level": "High"}, {"id": "OAUTH-M-002", "title": "OAuth 2.0 Scope Limitation & Consent", "risk_level": "High"}, {"id": "SAML-M-002", "title": "SAML Encryption & Attribute Protection", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/javascript/jQuery/colorbox/jquery.colorbox.js`
+**Scanned at**: 2026-10-11T16:37:16.772984+00:00
+**Mandard DB coverage**: 64 applicable mandards checked (SECR, SAST, HDR, CORS, INPUT, INJECT…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🔴 CRITICAL | [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) | SQL query built by string interpolation or concatenation | 624 |
+
+#### [DB-M-001](https://verify.example-org.internal/?id=DB-M-001) — SQL query built by string interpolation or concatenation
+```js
+// Line 624
+$('select').not($box.find('select')).filter(function () {
+```
+**Suggested fix:**
+```js
+# Suggested fix: always use parameterised queries
+# WRONG (PHP):  $q = "SELECT * FROM users WHERE id = '$id'";
+# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id
+# Python (psycopg2 / sqlite3):
+cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);
+# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])
+# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');
+#        ps.setInt(1, userId);
+```
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🟠 High | [IDOR-M-002](https://verify.example-org.internal/?id=IDOR-M-002) | Opaque Object Identifiers |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [HDR-M-009](https://verify.example-org.internal/?id=HDR-M-009) | Cache-Control for Sensitive Data |
+| 🟠 High | [IDOR-M-003](https://verify.example-org.internal/?id=IDOR-M-003) | Avoid Exposing IDs in URLs |
+| 🟠 High | [IDOR-M-005](https://verify.example-org.internal/?id=IDOR-M-005) | IDOR Test Coverage Matrix |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+
+_+ 56 more applicable mandards — [view all 64 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "DB-M-001", "severity": "CRITICAL", "line": 624, "message": "SQL query built by string interpolation or concatenation", "fix_snippet": "# Suggested fix: always use parameterised queries\n# WRONG (PHP):  $q = \"SELECT * FROM users WHERE id = '$id'\";\n# WRONG (Py):   query = 'SELECT * FROM users WHERE id = ' + user_id\n# Python (psycopg2 / sqlite3):\ncursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))\n# PHP (PDO):  $s = $pdo->prepare('SELECT * FROM users WHERE id = ?'); $s->execute([$id]);\n# Node.js (pg):  pool.query('SELECT * FROM users WHERE id = $1', [userId])\n# Java:  PreparedStatement ps = conn.prepareStatement('SELECT * FROM users WHERE id = ?');\n#        ps.setInt(1, userId);"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "DEP-M-001", "title": "Pin Dependency Versions in Production Builds", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "AJAX-M-001", "title": "AJAX Request Validation & CSRF Protection", "risk_level": "High"}, {"id": "DEP-M-003", "title": "Dependency Name-Confusion Defense (Typosquatting, Slopsquatting, Dependency Confusion)", "risk_level": "High"}, {"id": "LOG-M-001", "title": "Stream Logs to SIEM", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "AJAX-M-002", "title": "AJAX Response Sanitization & XSS Prevention", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "DEP-M-002", "title": "Package Manager Lifecycle Script Hardening", "risk_level": "High"}]
+-->
+
+---
+
+## SAGF Compliance Scan: `src/javascript/jQuery/colorbox/jquery.colorbox-min.js`
+**Scanned at**: 2026-10-11T16:37:16.585671+00:00
+**Mandard DB coverage**: 64 applicable mandards checked (SECR, SAST, HDR, CORS, INPUT, INJECT…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### 🚨 Confirmed Violations (1)
+| Sev | Mandard | Title | Line |
+|-----|---------|-------|------|
+| 🟠 HIGH | [LOG-M-001](https://verify.example-org.internal/?id=LOG-M-001) | Stream Logs to SIEM | 4 |
+
+#### [LOG-M-001](https://verify.example-org.internal/?id=LOG-M-001) — Sensitive data logged to console
+```js
+// Line 4
+(function(a,b,c){function Z(c,d,e){var g=b.createElement(c);return d&&(g.id=f+d),e&&(g.style.cssText=e),a(g)}function $(a){var b=y.length,c=(Q+a)%b;return 0>c?b+c:c}function _(a,b){return Math.roun...
+```
+**Suggested fix:**
+```js
+// Suggested fix: never log credentials — log a masked reference instead
+// WRONG:  console.log('Auth', password, apiKey);
+const logger = require('./logger');  // structured logger (e.g. winston, pino)
+logger.info('Auth attempt', { userId, tokenPresent: !!apiKey });  // mask value
+```
+> 💡 **Why**: Risk: Without centralized logging, it is impossible to perform effective incident response. If an attacker breaches an application, the logs on the compromised server will be the first thing they delete.
+> 🔧 **Guidance**: Mask or redact secrets in CI output, avoid echoing environment variables, and configure log retention/access controls. Invalidate any secret discovered in logs.
+> [Full remediation →](https://verify.example-org.internal/?id=LOG-M-001)
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [IDOR-M-002](https://verify.example-org.internal/?id=IDOR-M-002) | Opaque Object Identifiers |
+| 🟠 High | [IDOR-M-005](https://verify.example-org.internal/?id=IDOR-M-005) | IDOR Test Coverage Matrix |
+| 🔴 Critical | [HDR-M-001](https://verify.example-org.internal/?id=HDR-M-001) | Enforce X-Content-Type-Options |
+| 🔴 Critical | [INJECT-M-002](https://verify.example-org.internal/?id=INJECT-M-002) | OS Command Injection Prevention |
+| 🔴 Critical | [INJECT-M-003](https://verify.example-org.internal/?id=INJECT-M-003) | XML External Entity (XXE) Prevention |
+| 🟠 High | [HDR-M-006](https://verify.example-org.internal/?id=HDR-M-006) | Enforce Content-Type and Charset |
+| 🟠 High | [INJECT-M-001](https://verify.example-org.internal/?id=INJECT-M-001) | LDAP Injection Prevention |
+
+_+ 55 more applicable mandards — [view all 63 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+
+<!-- CODI_FINDINGS_JSON
+[{"mandard_id": "LOG-M-001", "severity": "HIGH", "line": 4, "message": "Sensitive data logged to console", "fix_snippet": "// Suggested fix: never log credentials \u2014 log a masked reference instead\n// WRONG:  console.log('Auth', password, apiKey);\nconst logger = require('./logger');  // structured logger (e.g. winston, pino)\nlogger.info('Auth attempt', { userId, tokenPresent: !!apiKey });  // mask value"}]
+-->
+
+<!-- CODI_ADVISORY_JSON
+[{"id": "IDOR-M-004", "title": "Context-Aware Data Queries", "risk_level": "Critical"}, {"id": "IDOR-M-002", "title": "Opaque Object Identifiers", "risk_level": "High"}, {"id": "IDOR-M-005", "title": "IDOR Test Coverage Matrix", "risk_level": "High"}, {"id": "HDR-M-001", "title": "Enforce X-Content-Type-Options", "risk_level": "Critical"}, {"id": "INJECT-M-002", "title": "OS Command Injection Prevention", "risk_level": "Critical"}, {"id": "INJECT-M-003", "title": "XML External Entity (XXE) Prevention", "risk_level": "Critical"}, {"id": "HDR-M-006", "title": "Enforce Content-Type and Charset", "risk_level": "High"}, {"id": "INJECT-M-001", "title": "LDAP Injection Prevention", "risk_level": "High"}, {"id": "LOG-M-004", "title": "Trusted Time Synchronization for Security Events", "risk_level": "High"}, {"id": "IDOR-M-001", "title": "IDOR Protection", "risk_level": "Critical"}, {"id": "SECR-M-002", "title": "Prevent Secret Exposure in CI/CD Logs and History", "risk_level": "Critical"}, {"id": "IDOR-M-003", "title": "Avoid Exposing IDs in URLs", "risk_level": "High"}, {"id": "IDOR-M-006", "title": "Log Authorization Failures", "risk_level": "High"}, {"id": "IDOR-M-007", "title": "Validate Nested Resource Ownership", "risk_level": "High"}, {"id": "INPUT-M-001", "title": "Whitelist-Based Input Validation", "risk_level": "High"}, {"id": "INPUT-M-002", "title": "Input Encoding & Output Encoding", "risk_level": "High"}, {"id": "CRYPT-M-002", "title": "Encryption in Transit (TLS 1.3+)", "risk_level": "Critical"}, {"id": "HDR-M-005", "title": "Disable Legacy X-XSS-Protection Filter", "risk_level": "Critical"}, {"id": "HDR-M-014", "title": "Content Security Policy CSP", "risk_level": "Critical"}, {"id": "SAST-M-004", "title": "Prevent Insecure Deserialization", "risk_level": "Critical"}, {"id": "SAST-M-005", "title": "Prevent Mass Assignment", "risk_level": "Critical"}, {"id": "SAST-M-006", "title": "Native Memory Safety and Unsafe Code Assurance", "risk_level": "Critical"}, {"id": "AJAX-M-001", "title": "AJAX Request Validation & CSRF Protection", "risk_level": "High"}, {"id": "AUTH-M-003", "title": "Session Management & Timeout Controls", "risk_level": "High"}, {"id": "DEP-M-003", "title": "Dependency Name-Confusion Defense (Typosquatting, Slopsquatting, Dependency Confusion)", "risk_level": "High"}, {"id": "HDR-M-009", "title": "Cache-Control for Sensitive Data", "risk_level": "High"}, {"id": "LOG-M-002", "title": "Implement Comprehensive CI/CD Audit Logging", "risk_level": "High"}, {"id": "LOG-M-003", "title": "Configure Centralized Log Aggregation and SIEM Alerting for CI/CD", "risk_level": "High"}, {"id": "SECR-M-001", "title": "No Hardcoded Secrets", "risk_level": "Critical"}, {"id": "SECR-M-004", "title": "Short-Lived Credentials & Rotation", "risk_level": "Critical"}, {"id": "SECR-M-005", "title": "No Secrets in Build Logs", "risk_level": "Critical"}, {"id": "SECR-M-003", "title": "Enforce Temporary Credentials and Credential Rotation in CI/CD", "risk_level": "High"}, {"id": "AJAX-M-002", "title": "AJAX Response Sanitization & XSS Prevention", "risk_level": "Critical"}, {"id": "AUTH-M-001", "title": "Secure Password Hashing", "risk_level": "Critical"}, {"id": "AUTH-M-002", "title": "Multi-Factor Authentication (MFA) Enforcement", "risk_level": "Critical"}, {"id": "COOK-M-001", "title": "Secure Cookie Attributes (HttpOnly, Secure, SameSite)", "risk_level": "Critical"}, {"id": "CRYPT-M-001", "title": "Encryption at Rest", "risk_level": "Critical"}, {"id": "DEP-M-001", "title": "Pin Dependency Versions in Production Builds", "risk_level": "Critical"}, {"id": "HDR-M-002", "title": "No Server Banners", "risk_level": "Critical"}, {"id": "HDR-M-003", "title": "Enforce HSTS", "risk_level": "Critical"}, {"id": "HDR-M-007", "title": "Enforce Referrer Policy", "risk_level": "Critical"}, {"id": "HDR-M-008", "title": "Enforce Permissions Policy", "risk_level": "Critical"}, {"id": "HDR-M-011", "title": "Cross-Origin-Resource-Policy (CORP)", "risk_level": "Critical"}, {"id": "HDR-M-012", "title": "Cross-Origin-Embedder-Policy (COEP)", "risk_level": "Critical"}, {"id": "SAST-M-001", "title": "No Critical SAST Findings", "risk_level": "Critical"}, {"id": "SAST-M-002", "title": "Secure File Upload Validation", "risk_level": "Critical"}, {"id": "SAST-M-003", "title": "Disable XXE Processing", "risk_level": "Critical"}, {"id": "AUTH-M-004", "title": "Password Reset & Account Recovery", "risk_level": "High"}, {"id": "COOK-M-002", "title": "Cookie Theft Prevention & Rotation", "risk_level": "High"}, {"id": "CORS-M-001", "title": "No Reflected Origin (CORS)", "risk_level": "High"}, {"id": "CRYPT-M-003", "title": "Key Rotation & Lifecycle Management", "risk_level": "High"}, {"id": "CRYPT-M-004", "title": "Algorithm Selection & Post-Quantum Readiness", "risk_level": "High"}, {"id": "CRYPT-M-005", "title": "Certificate Management & Pinning", "risk_level": "High"}, {"id": "CRYPT-M-006", "title": "Hardware Security Module (HSM) for High-Value Keys", "risk_level": "High"}, {"id": "DEP-M-002", "title": "Package Manager Lifecycle Script Hardening", "risk_level": "High"}]
+-->
+

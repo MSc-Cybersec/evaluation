@@ -1,0 +1,35 @@
+### SAGF Compliance Report — `DVWA-master/vulnerabilities/open_redirect/index.php`
+
+## SAGF Compliance Scan: `DVWA-master/vulnerabilities/open_redirect/index.php`
+**Scanned at**: 2026-10-11T17:07:40.419364+00:00
+**Mandard DB coverage**: 93 applicable mandards checked (SECR, AUTH, CRYPT, SAST, HDR, ERR…)
+**Attestation**: `eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ0aW1lc3RhbXAiOiA...`
+
+### ✅ No violations detected by static pattern analysis
+
+
+### ⚠️ Most Relevant Mandards Requiring Tool Verification
+_Ranked by relevance to this code. Static scan did not detect violations — use the SAGF Tier 2 toolchain to verify:_
+
+| Risk | Mandard | Title |
+|------|---------|-------|
+| 🔴 Critical | [IDOR-M-004](https://verify.example-org.internal/?id=IDOR-M-004) | Context-Aware Data Queries |
+| 🟠 High | [CRYPT-M-006](https://verify.example-org.internal/?id=CRYPT-M-006) | Hardware Security Module (HSM) for High-Value Keys |
+| 🟠 High | [DB-M-004](https://verify.example-org.internal/?id=DB-M-004) | Database Security Hardening and Configuration |
+| 🟠 High | [DB-M-006](https://verify.example-org.internal/?id=DB-M-006) | Sensitive Data Masking and Fine-Grained Access |
+| 🟠 High | [IDOR-M-005](https://verify.example-org.internal/?id=IDOR-M-005) | IDOR Test Coverage Matrix |
+| 🟠 High | [IDOR-M-007](https://verify.example-org.internal/?id=IDOR-M-007) | Validate Nested Resource Ownership |
+| 🟠 High | [LOG-M-004](https://verify.example-org.internal/?id=LOG-M-004) | Trusted Time Synchronization for Security Events |
+| 🟠 High | [INPUT-M-001](https://verify.example-org.internal/?id=INPUT-M-001) | Whitelist-Based Input Validation |
+
+_+ 85 more applicable mandards — [view all 93 in SAGF UI →](https://verify.example-org.internal/)_
+
+> Run SonarQube, Snyk, Semgrep, and other SAGF Tier 2 tools for comprehensive coverage per SAGF-STD-004.
+### 🤖 AI Semantic Analysis
+_Checked all 81 applicable advisory mandards against this code:_
+
+| Risk | Mandard | Status | Finding | Line |
+|------|---------|--------|---------|------|
+| 🟠 High | [IDOR-M-002](https://verify.example-org.internal/?id=IDOR-M-002) | CONFIRMED | predictable sequential numeric identifiers are used | 17 |
+| 🟠 High | [IDOR-M-003](https://verify.example-org.internal/?id=IDOR-M-003) | CONFIRMED | object identifiers are exposed in URL query parameters | 17 |
+| 🟠 High | [INPUT-M-002](https://verify.example-org.internal/?id=INPUT-M-002) | SUSPECTED | `$html` is inserted into HTML without visible contextual output encoding | 47 |
