@@ -8,13 +8,27 @@ codes; no reliability coefficient is computed and none is claimed (§3.8).
 
 | Source | Units coded |
 | :--- | ---: |
-| DVWA workspace scan — complete finding set (`codi-response/W1.md`) | 61 findings |
-| Targeted module scans, semantic findings (`codi-response/D1.md`–`D22.md`, 19 distinct modules) | 114 findings |
-| Domain consultations (`sage-response/domain-runs/G01`–`G80`) | 80 responses |
+| DVWA workspace scan — complete finding set (`codi_scan_reports/W1.md`, `W1-retest2.md`) | 61 baseline, 63 corrected |
+| Structural coding across all six workspace scans (`W1`–`W6`, both builds) | 316 baseline, 284 corrected |
+| Targeted module scans, semantic findings (`codi_scan_reports/D1.md`–`D22.md`, 19 distinct modules) | 114 findings |
+| Domain consultations (`sage_responses/G01`–`G80`) | 80 responses |
 
-Only the DVWA set was audited line by line against source code, because it is the one
-stimulus for which every finding could be adjudicated against the file it cites. Counts
-below state their denominator in each case.
+**Two coding depths, and why they differ.** Failure modes divide by what establishing
+them requires.
+
+- **F2 is structural.** It is established by observing that one file and line number
+  carries findings under two or more records. That needs no reading of the source, so it
+  is coded across **all six applications in both builds**.
+- **F1 and F3 require adjudication against the code.** Deciding whether a flagged line
+  instantiates the reported condition, or is a comment rather than a statement, means
+  reading the file. These are coded on the **DVWA set only**, because it is the one
+  stimulus for which every finding could be adjudicated against the file it cites within
+  the resources of a solo project. This bounds the correctness claims to one application
+  and is declared as the principal conclusion-validity limitation (§3.8).
+- **F4, F5 and F6** are coded across the full module-scan and consultation sets, since
+  each is established from the response itself.
+
+Counts below state their denominator and their build in each case.
 
 **Unit of analysis.** One finding (Codi) or one response (Sage). A single source line
 carrying two findings is two units; this is itself coded as F2.
@@ -40,7 +54,7 @@ match is explicable by keyword proximity rather than by value, assignment or pro
 **Exclude when** the construct does instantiate the condition but the citation is wrong
 (no such cases remain after the AUTH-M-001 rebinding), or when the line is non-executable (F3).
 
-**Count.** 20 of 61 audited findings. Systematic.
+**Count.** Baseline 20 of 61 audited findings; corrected build **0 of 63**. Systematic, remediated.
 
 **Evidence.** Ten `SECR-M-001` findings report *"Potential hardcoded secret detected"* against
 SQL interpolation of the form `$query = "SELECT * FROM users WHERE user='$user' AND password='$pass';"`.
@@ -61,11 +75,21 @@ duplicate entries for a single construct.
 
 **Exclude when** a file legitimately contains distinct defects on different lines.
 
-**Count.** 11 lines. Systematic.
+**Count.** Coded across all six applications, both builds. Baseline **52 lines** — DVWA 11,
+crAPI 3, Juice Shop 20, Mutillidae II 3, NodeGoat 4, WebGoat 11. Corrected build **5 lines**
+— NodeGoat 2, WebGoat 3, and none in the other four. Systematic, largely remediated.
 
-**Evidence.** Eleven lines are each reported twice, under `SECR-M-001` and `AUTH-M-001`,
-yielding two Critical-severity entries per construct. In ten of the eleven the underlying
-detection is a false positive (F1), so duplication amplifies noise rather than a true signal.
+**Evidence.** In the baseline, every instance pairs `SECR-M-001` with `AUTH-M-001` on one
+line, yielding two Critical-severity entries per construct; in the DVWA set, ten of the
+eleven rest on a detection that is itself a false positive (F1), so duplication amplifies
+noise rather than a true signal. The cause was a single overlapping alternative shared by
+the two credential detectors, removed in the corrected build.
+
+**Negative cases.** The five residual instances are of a different character and are not
+scored as defects. Each is a minified single-line JavaScript bundle in which `Math.random()`
+and `eval(` genuinely co-occur, so two distinct records properly apply to one physical line.
+The code is retained rather than closed because the construct — one line, two records — still
+degrades risk-ordered prioritisation even when both findings are correct.
 
 ## F3 — Non-executable code flagged as executable
 
@@ -76,7 +100,8 @@ is not the primitive named.
 
 **Exclude when** the construct is executable but governed by a different record (F1).
 
-**Count.** 2 findings. Incidental.
+**Count.** 2 findings in both builds. Incidental, not remediated: distinguishing a comment
+from a statement requires parsing rather than pattern refinement (§7.3).
 
 **Evidence.** In `dvwa/js/dvwaPage.js` the flagged line is a comment containing `eval(`.
 In `vulnerabilities/cryptography/source/oracle_attack.php` the flagged construct is `curl_exec()`,
