@@ -8,7 +8,8 @@ record identifier, domain, risk, category, and the framework control
 tooling and any framework control titles are dropped.
 
 This script is published for inspection rather than execution: its input,
-`mandards.js`, is not part of this package. It is included because the
+`mandards.js`, is in `mandard_corpus.zip` of this package. It is included
+because the
 normalisation it performs is a measurement decision, not a mechanical one. An
 entry may appear as "A.8.2" or as "A.8.2 Privileged access rights"; counting
 those as two controls inflates the distinct-control figure, while truncating at
